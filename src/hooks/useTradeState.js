@@ -45,23 +45,10 @@ export function useTradeState() {
     return () => sub.remove();
   }, []);
 
-  const handleAddEntry = () => {
+  const handleAddRow = () => {
     if (trades.length < MAX_TRADES) {
-      setTrades([...trades, { entryPrice: '', closePrice: null }]);
+      setTrades([...trades, { entryPrice: '', closePrice: '' }]);
     }
-  };
-
-  const handleAddClose = () => {
-    setTrades(prev => {
-      const next = prev.map(t => ({ ...t }));
-      for (let i = 0; i < next.length; i++) {
-        if (next[i].closePrice === null) {
-          next[i].closePrice = '';
-          break;
-        }
-      }
-      return next;
-    });
   };
 
   const handleEntryChange = (index, text) => {
@@ -106,13 +93,12 @@ export function useTradeState() {
     entryRefs,
     closeRefs,
     scrollRef,
-    handleAddEntry,
-    handleAddClose,
+    handleAddRow,
     handleEntryChange,
     handleCloseChange,
     handleDeleteEntry,
     handleDeleteClose,
-    canAddEntry: entryCount < MAX_TRADES,
-    canAddClose: entryCount > 0 && closeCount < entryCount,
+    canAddRow: entryCount < MAX_TRADES,
+    canAddClose: entryCount < MAX_TRADES,
   };
 }

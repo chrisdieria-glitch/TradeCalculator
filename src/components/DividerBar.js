@@ -1,28 +1,18 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function DividerBar({ canAddEntry, canAddClose, onAddEntry, onAddClose, showClose }) {
+export default function DividerBar({ canAddRow, onAddRow}) {
   return (
     <View style={styles.bar}>
       <View style={styles.buttonRow}>
         <TouchableOpacity
-          style={[styles.button, !canAddEntry && styles.buttonDisabled]}
-          onPress={onAddEntry}
+          style={[styles.button, !canAddRow && styles.buttonDisabled]}
+          onPress={onAddRow}
         >
-          <Text style={[styles.buttonText, !canAddEntry && styles.buttonTextDisabled]}>
-            + Add Entry Price
+          <Text style={[styles.buttonText, !canAddRow && styles.buttonTextDisabled]}>
+            + Add entry and close price
           </Text>
         </TouchableOpacity>
-        {showClose && (
-          <TouchableOpacity
-            style={[styles.button, !canAddClose && styles.buttonDisabled]}
-            onPress={onAddClose}
-          >
-            <Text style={[styles.buttonText, !canAddClose && styles.buttonTextDisabled]}>
-              + Add Close Price
-            </Text>
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );

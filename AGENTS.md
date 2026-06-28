@@ -51,6 +51,7 @@ When one or more Entry Prices are entered, the application automatically calcula
 # Guidelines
 
 * Keep the project simple and easy to understand.
+* Comment the code, then I can understand it 
 * Use modern React Native practices and functional components.
 * Prioritize readability and maintainability over unnecessary complexity.
 * Calculations should update automatically whenever the capital or entry prices change.

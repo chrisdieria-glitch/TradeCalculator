@@ -25,14 +25,12 @@ export default function CalculatorScreen() {
     entryRefs,
     closeRefs,
     scrollRef,
-    handleAddEntry,
-    handleAddClose,
+    handleAddRow,
     handleEntryChange,
     handleCloseChange,
     handleDeleteEntry,
     handleDeleteClose,
-    canAddEntry,
-    canAddClose,
+    canAddRow,
   } = useTradeState();
 
   const handleCapitalChange = (text) => {
@@ -139,11 +137,8 @@ export default function CalculatorScreen() {
 
         {hasValidCapital && (
           <DividerBar
-            canAddEntry={canAddEntry}
-            canAddClose={canAddClose}
-            onAddEntry={handleAddEntry}
-            onAddClose={handleAddClose}
-            showClose={entryCount > 0}
+            canAddRow={canAddRow}
+            onAddRow={handleAddRow}
           />
         )}
 
