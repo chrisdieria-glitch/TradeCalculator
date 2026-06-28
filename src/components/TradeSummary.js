@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   colCenter: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   colRight: {
     flex: 1,
@@ -64,9 +64,10 @@ const styles = StyleSheet.create({
   },
   colRightAlone: {
     flex: 2,
+    alignItems: 'flex-end',
   },
   label: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '600',
     color: '#484F58',
     textTransform: 'uppercase',
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     fontFamily: monoFont,
   },
   profitValue: {
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: '700',
     fontFamily: monoFont,
   },

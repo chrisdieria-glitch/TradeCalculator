@@ -27,7 +27,9 @@ export default function TradeBreakdown({ capitalNum, amountWrapWidth, onAmountLa
         const amount = formatCurrency((capitalNum * trade.percent) / 100);
         return (
           <View key={trade.id} style={styles.row}>
-            <Text style={[styles.colTrade, styles.tradeLabel]}>{trade.label}</Text>
+            <View style={styles.colTrade}>
+              <Text style={styles.tradeLabel}>{trade.label}</Text>
+            </View>
             <View style={styles.colSize}>
               <Text style={styles.badgeText}>{trade.percent}%</Text>
             </View>
@@ -76,19 +78,24 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   colTrade: {
-    flex: 1.4,
+    width: 50,
+    alignItems: 'center',
   },
   colSize: {
-    width: 40,
+    minWidth: 40,
     alignItems: 'flex-start',
+    marginHorizontal: 10,
   },
   colRisk: {
+    flex: 21,
     width: 44,
     alignItems: 'flex-start',
   },
   colAmount: {
-    flex: 1,
     alignItems: 'flex-end',
+    minWidth: 60,
+    maxWidth: 130,
+    marginHorizontal: 10,
   },
   row: {
     flexDirection: 'row',

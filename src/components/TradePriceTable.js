@@ -17,8 +17,8 @@ export default function TradePriceTable({
 }) {
   return (
     <View style={styles.panel}>
+      
       <Text style={sharedStyles.sectionTitle}>Trade History</Text>
-
       <View style={styles.tableHeader}>
         <Text style={[styles.colTrade, styles.headerText]}>Trade</Text>
         <Text style={[styles.colPrices, styles.headerText]}>Prices</Text>
@@ -47,18 +47,9 @@ export default function TradePriceTable({
                   value={hasEntry ? trade.entryPrice : ''}
                   onChangeText={(text) => onEntryChange(index, text)}
                 />
-                <TouchableOpacity
-                  onPress={() => onDeleteEntry(index)}
-                  style={styles.deleteButton}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <Text style={styles.deleteIcon}>×</Text>
-                </TouchableOpacity>
               </View>
               <View style={styles.priceLine}>
                 <Text style={styles.priceLabel}>Close:</Text>
-                {trade.closePrice !== null ? (
-                  <>
                     <TextInput
                       ref={el => { closeRefs.current[index] = el; }}
                       style={styles.input}
@@ -68,34 +59,32 @@ export default function TradePriceTable({
                       value={trade.closePrice}
                       onChangeText={(text) => onCloseChange(index, text)}
                     />
-                    <TouchableOpacity
-                      onPress={() => onDeleteClose(index)}
-                      style={styles.deleteButton}
-                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    >
-                      <Text style={styles.deleteIcon}>×</Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <Text style={styles.dash}>—</Text>
-                )}
               </View>
             </View>
-
-            <View style={styles.colProfit}>
-              {profitStr ? (
-                <Text
-                  style={[
-                    styles.profitText,
-                    isPositive && styles.profitPositive,
-                    isNegative && styles.profitNegative,
-                  ]}
-                >
-                  {profitStr}
-                </Text>
-              ) : (
-                <Text style={styles.profitEmpty}>—</Text>
-              )}
+            <View style={styles.grid}>
+              <View style={styles.colProfit}>
+                {profitStr ? (
+                  <Text
+                    style={[
+                      styles.profitText,
+                      isPositive && styles.profitPositive,
+                      isNegative && styles.profitNegative,
+                    ]}
+                  >
+                    {profitStr}
+                  </Text>
+                ) : (
+                  <Text style={styles.profitEmpty}>—</Text>
+                )}
+              </View>
+              <View>
+                <TouchableOpacity 
+                  style={styles.deleteButton}
+                  onPress={() => onDeleteEntry(index)}>
+                    
+                  <Text style={styles.deleteIcon}>×</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         );
@@ -137,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   colProfit: {
-    width: 90,
+    width: 90, 
     alignItems: 'flex-end',
   },
   row: {
@@ -167,7 +156,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#2D333B',
-    minWidth: 90,
+    width: 90,
+    marginRight: 5,
     textAlign: 'right',
   },
   dash: {
@@ -183,7 +173,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   deleteIcon: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '600',
     color: '#484F58',
     lineHeight: 18,
@@ -192,6 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     fontFamily: monoFont,
+    marginLeft: 10,
   },
   profitPositive: {
     color: '#26A69A',
@@ -205,4 +196,9 @@ const styles = StyleSheet.create({
     color: '#484F58',
     fontFamily: monoFont,
   },
+  grid: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  }
 });
