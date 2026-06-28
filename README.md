@@ -51,9 +51,9 @@ When entry prices are provided, the application calculates a **weighted average 
 
 ---
 
-## Project Architecture 
+## 📁 Project Architecture
 
-'''
+```
  .
 ├──  AGENTS.md
 ├──  App.js
@@ -86,7 +86,8 @@ When entry prices are provided, the application calculates a **weighted average 
         ├──  format.js
         └──  sanitize.js
 
-'''
+
+```
 
 ## 📱 UX / Design Principles
 
