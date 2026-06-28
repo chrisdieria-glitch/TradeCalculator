@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 
 export default function EmptyState() {
   return (
-    <View style={styles.emptyState}>
-      <Text style={styles.emptyTitle}>No capital entered</Text>
-      <Text style={styles.emptyText}>
+    <View style={styles.panel}>
+      <Text style={styles.title}>No capital entered</Text>
+      <Text style={styles.text}>
         Enter your trading capital above to see how it splits across 5 trades.
       </Text>
     </View>
@@ -13,27 +13,24 @@ export default function EmptyState() {
 }
 
 const styles = StyleSheet.create({
-  emptyState: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 40,
+  panel: {
+    backgroundColor: '#161B22',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#21262D',
+    padding: 32,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
   },
-  emptyTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: '#8B949E',
     marginBottom: 8,
   },
-  emptyText: {
-    fontSize: 14,
-    color: '#6B7280',
+  text: {
+    fontSize: 13,
+    color: '#484F58',
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 20,
   },
 });

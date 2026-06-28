@@ -163,3 +163,23 @@ The goal of TradingCalculator is to provide a quick and convenient tool for trad
   - `src/screens/CalculatorScreen.js` — orchestrator composing all components
   - `App.js` reduced to 3 lines (import + render CalculatorScreen)
   - No UI, behavior, or functionality changes
+
+## 2026-06-26
+
+- Complete UI redesign to professional trading platform aesthetic:
+  - Dark navy background (`#0B111A`) with deep blue-gray surface panels (`#161B22`) and subtle panel borders (`#21262D`)
+  - All shadows and rounded card styles removed; replaced with flat bordered panels
+  - Monospace font (Menlo on iOS, monospace on Android) for all numeric values
+  - Capital input: monospace 22px, single-line border underline, green total on right
+  - Trade breakdown: table layout with column headers (Trade / Size / Risk / Amount), thin row separators (`#2D333B`), right-aligned monospace amounts
+  - Percentage and drawdown badges: smaller padding, lower-contrast semi-transparent backgrounds
+  - "Add Entry Price" button changed from filled blue to outlined style (border only, transparent bg, compact padding)
+  - Weighted average in monospace green text
+  - Entry prices: table layout with monospace inputs, subtle delete buttons, matching row separators
+  - 8px spacing system throughout (8/16/24/32 scale)
+  - Typography hierarchy: title 20px, labels 14px, monospace amounts default 16px (auto-scales to fit)
+  - Green (`#26A69A`) reserved for positive financial values
+  - Red (`#EF5350`) reserved for drawdown/risk indicators
+  - Blue (`#4A90D9`) as accent for outlines and focus indicators
+  - StatusBar set to light mode for dark background
+  - All existing functionality and calculations preserved unchanged

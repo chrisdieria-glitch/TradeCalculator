@@ -1,45 +1,60 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
+
+const monoFont = Platform.select({
+  ios: 'Menlo',
+  android: 'monospace',
+  default: 'monospace',
+});
 
 export const sharedStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#0B111A',
   },
   scrollContent: {
-    paddingTop: 70,
-    paddingHorizontal: 20,
+    paddingTop: 64,
+    paddingHorizontal: 16,
     paddingBottom: 120,
   },
+  sectionContainer: {
+    backgroundColor: '#161B22',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#21262D',
+    padding: 16,
+    marginBottom: 16,
+  },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: '#8B949E',
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 12,
+    letterSpacing: 1.5,
+    marginBottom: 16,
   },
   tradeCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
+    backgroundColor: '#161B22',
+    borderRadius: 0,
+    padding: 0,
+    marginBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2D333B',
+    paddingVertical: 8,
   },
   tradeLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   tradeLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: '#E6EDF3',
+  },
+  monoText: {
+    fontFamily: monoFont,
   },
 });

@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <View style={styles.header}>
       <Text style={styles.title}>Trading Calculator</Text>
-      <Text style={styles.subtitle}>Split your capital into 5 risk-allocated trades</Text>
+      <Text style={styles.subtitle}>Capital allocation tool</Text>
     </View>
   );
 }
@@ -15,14 +15,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
-    marginBottom: 4,
+    color: '#E6EDF3',
+    marginBottom: 2,
   },
   subtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    lineHeight: 20,
+    fontSize: 12,
+    color: '#8B949E',
+    lineHeight: 18,
   },
 });

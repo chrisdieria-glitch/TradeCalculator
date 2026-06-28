@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { sanitizeDecimalInput } from '../utils/sanitize';
 import { formatCurrency } from '../utils/format';
@@ -56,7 +56,7 @@ export default function CalculatorScreen() {
       style={sharedStyles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <ScrollView
         ref={scrollRef}
         contentContainerStyle={sharedStyles.scrollContent}

@@ -1,37 +1,46 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { TRADES } from '../constants/trades';
 import { formatCurrency } from '../utils/format';
 import { getPreciseFontSize } from '../utils/font';
 import { sharedStyles } from '../styles/shared';
 
+const monoFont = Platform.select({
+  ios: 'Menlo',
+  android: 'monospace',
+  default: 'monospace',
+});
+
 export default function TradeBreakdown({ capitalNum, amountWrapWidth, onAmountLayout }) {
   return (
-    <View style={styles.dashboard}>
-      <Text style={sharedStyles.sectionTitle}>Trade Breakdown</Text>
+    <View style={styles.panel}>
+      <Text style={sharedStyles.sectionTitle}>Allocations</Text>
+
       <View style={styles.tableHeader}>
-        <View style={styles.tableHeaderLeft}>
-          <Text style={styles.tableHeaderText}>Trade</Text>
-          <Text style={styles.tableHeaderText}>Percent</Text>
-          <Text style={styles.tableHeaderText}>Drop</Text>
-        </View>
-        <Text style={styles.tableHeaderText}>Amount</Text>
+        <Text style={[styles.colTrade, styles.headerText]}>Trade</Text>
+        <Text style={[styles.colSize, styles.headerText]}>Size</Text>
+        <Text style={[styles.colRisk, styles.headerText]}>Risk</Text>
+        <Text style={[styles.colAmount, styles.headerText]}>Amount</Text>
       </View>
+
       {TRADES.map((trade) => {
         const amount = formatCurrency((capitalNum * trade.percent) / 100);
         return (
-          <View key={trade.id} style={sharedStyles.tradeCard}>
-            <View style={sharedStyles.tradeLeft}>
-              <Text style={sharedStyles.tradeLabel}>{trade.label}</Text>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{trade.percent}%</Text>
-              </View>
-              <View style={styles.drawdownBadge}>
-                <Text style={styles.drawdownText}>{trade.bajada}% ↓</Text>
-              </View>
+          <View key={trade.id} style={styles.row}>
+            <Text style={[styles.colTrade, styles.tradeLabel]}>{trade.label}</Text>
+            <View style={styles.colSize}>
+              <Text style={styles.badgeText}>{trade.percent}%</Text>
             </View>
-            <View style={styles.amountWrap} onLayout={onAmountLayout}>
-              <Text style={[styles.amount, { fontSize: getPreciseFontSize(amount, amountWrapWidth) }]}>
+            <View style={styles.colRisk}>
+              <Text style={styles.drawdownText}>{trade.bajada}%</Text>
+            </View>
+            <View style={styles.colAmount} onLayout={trade.id === 1 ? onAmountLayout : undefined}>
+              <Text
+                style={[
+                  styles.amount,
+                  { fontSize: getPreciseFontSize(amount, trade.id === 1 ? amountWrapWidth : amountWrapWidth) },
+                ]}
+              >
                 ${amount}
               </Text>
             </View>
@@ -43,60 +52,80 @@ export default function TradeBreakdown({ capitalNum, amountWrapWidth, onAmountLa
 }
 
 const styles = StyleSheet.create({
-  dashboard: {
-    gap: 0,
+  panel: {
+    backgroundColor: '#161B22',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#21262D',
+    padding: 16,
+    marginBottom: 16,
   },
   tableHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginBottom: 4,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2D333B',
+    marginBottom: 0,
   },
-  tableHeaderLeft: {
+  headerText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#484F58',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  colTrade: {
+    flex: 1.4,
+  },
+  colSize: {
+    width: 40,
+    alignItems: 'flex-start',
+  },
+  colRisk: {
+    width: 44,
+    alignItems: 'flex-start',
+  },
+  colAmount: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2D333B',
   },
-  tableHeaderText: {
-    fontSize: 11,
+  tradeLabel: {
+    fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginLeft: 0,
-  },
-  badge: {
-    backgroundColor: '#EFF6FF',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    color: '#E6EDF3',
   },
   badgeText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#3B82F6',
-  },
-  drawdownBadge: {
-    backgroundColor: '#FEF2F2',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#58A6FF',
+    backgroundColor: 'rgba(74,144,217,0.08)',
+    borderRadius: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    overflow: 'hidden',
   },
   drawdownText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#DC2626',
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#F08784',
+    backgroundColor: 'rgba(239,83,80,0.08)',
+    borderRadius: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    overflow: 'hidden',
   },
   amount: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#059669',
-  },
-  amountWrap: {
-    flex: 1,
-    alignItems: 'center',
-    paddingLeft: 8,
+    color: '#26A69A',
+    fontFamily: monoFont,
   },
 });
