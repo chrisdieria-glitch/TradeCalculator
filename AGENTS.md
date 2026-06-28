@@ -55,6 +55,8 @@ When one or more Entry Prices are entered, the application automatically calcula
 * Prioritize readability and maintainability over unnecessary complexity.
 * Calculations should update automatically whenever the capital or entry prices change.
 * Don't change anything unless I ask you.
+* Before starting any task, check if there are installed skills relevant to the task using `npx skills find`.
+* When you need up-to-date documentation for a library or framework, use the `context7` MCP tools.
 
 ## UX Principles
 
