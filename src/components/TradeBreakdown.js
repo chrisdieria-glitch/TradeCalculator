@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   amountWrap: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     paddingLeft: 8,
   },
 });
