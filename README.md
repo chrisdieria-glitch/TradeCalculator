@@ -1,6 +1,4 @@
-# 📊 TradingCalculator
-
-TradingCalculator is a simple mobile application built with **React Native** and **Expo (SDK v54)**.
+# 📊 PositionLab MobileApp
 
 The purpose of the app is to help traders divide a total trading capital into predefined allocations before opening positions and calculate weighted averages based on entry prices.
 

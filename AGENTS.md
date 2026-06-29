@@ -1,4 +1,4 @@
-# TradingCalculator
+# PositionLab
 
 ## IMPORTANT
 
@@ -10,7 +10,7 @@ https://docs.expo.dev/versions/v54.0.0/
 
 # Description
 
-TradingCalculator is a simple mobile application built with React Native and Expo.
+PositionLab is a simple mobile platform built with React, React Native, Expo and Vite.
 
 The purpose of the app is to help traders divide a trading capital into predefined allocations before opening positions. The user enters a total capital amount, and the application automatically calculates how much money should be allocated to each trade.
 

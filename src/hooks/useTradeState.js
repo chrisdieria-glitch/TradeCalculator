@@ -21,7 +21,7 @@ export function useTradeState() {
   }, [trades.length]);
 
   useLayoutEffect(() => {
-    const closeCount = trades.filter(t => t.closePrice !== null).length;
+    const closeCount = trades.filter(t => t.closePrice !== null && t.closePrice !== '').length;
     if (closeCount > prevCloseCount.current) {
       for (let i = 0; i < trades.length; i++) {
         if (trades[i].closePrice === '') {
@@ -84,7 +84,7 @@ export function useTradeState() {
   };
 
   const entryCount = trades.length;
-  const closeCount = trades.filter(t => t.closePrice !== null).length;
+  const closeCount = trades.filter(t => t.closePrice !== null && t.closePrice !== '').length;
 
   return {
     trades,

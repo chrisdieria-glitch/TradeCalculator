@@ -200,7 +200,7 @@ export default function HistoryScreen({ reloadTrigger }) {
       }
 
       case 'operation': {
-        return <OperationView operationId={current.id} onBack={pop} />;
+        return <OperationView operationId={current.id} />;
       }
 
       default:
@@ -229,7 +229,7 @@ export default function HistoryScreen({ reloadTrigger }) {
 /**
  * Displays a single saved operation in read-only mode.
  */
-function OperationView({ operationId, onBack }) {
+function OperationView({ operationId }) {
   const [operation, setOperation] = useState(null);
 
   useEffect(() => {
@@ -246,11 +246,6 @@ function OperationView({ operationId, onBack }) {
 
   return (
     <View>
-      <Pressable style={styles.backBtn} onPress={onBack}>
-        <Text style={styles.backArrow}>←</Text>
-        <Text style={styles.backLabel}>Back</Text>
-      </Pressable>
-
       <Text style={styles.dateLabel}>{dateStr}</Text>
       <JournalViewer operation={operation} />
     </View>

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function Header() {
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>Trading Calculator</Text>
+      <Text style={styles.title}>PositionLab</Text>
       <Text style={styles.subtitle}>Capital allocation tool</Text>
     </View>
   );
