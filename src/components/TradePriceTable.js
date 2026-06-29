@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { TRADES } from '../constants/trades';
 import { sharedStyles } from '../styles/shared';
+import { getPreciseFontSize } from '../utils/font';
 
 const monoFont = Platform.select({
   ios: 'Menlo',
@@ -15,6 +16,8 @@ export default function TradePriceTable({
   onDeleteEntry, onDeleteClose,
   profits,
 }) {
+  const [profitWidth, setProfitWidth] = useState(0);
+
   return (
     <View style={styles.panel}>
       
@@ -26,21 +29,22 @@ export default function TradePriceTable({
       </View>
 
       {trades.map((trade, index) => {
-        const profitStr = profits[index];
-        const isPositive = profitStr && profitStr.startsWith('+');
-        const isNegative = profitStr && profitStr.startsWith('-');
+        const profitData = profits[index];
+        const isPositive = profitData && profitData.amount.startsWith('+');
+        const isNegative = profitData && profitData.amount.startsWith('-');
         const hasEntry = trade.entryPrice !== null;
 
         return (
           <View key={index} style={styles.row}>
-            <Text style={styles.colTrade}>{TRADES[index].label}</Text>
-
+            <View style={styles.colTrade}>
+              <Text style={styles.tradeLabel}>{TRADES[index].label}</Text>
+            </View>
             <View style={styles.colPrices}>
               <View style={styles.priceLine}>
                 <Text style={styles.priceLabel}>Entry:</Text>
                 <TextInput
                   ref={el => { entryRefs.current[index] = el; }}
-                  style={styles.input}
+                  style={[styles.input, styles.entryInput]}
                   placeholder="0.00"
                   placeholderTextColor="#484F58"
                   keyboardType="decimal-pad"
@@ -52,7 +56,7 @@ export default function TradePriceTable({
                 <Text style={styles.priceLabel}>Close:</Text>
                     <TextInput
                       ref={el => { closeRefs.current[index] = el; }}
-                      style={styles.input}
+                      style={[styles.input, styles.closeInput]}
                       placeholder="0.00"
                       placeholderTextColor="#484F58"
                       keyboardType="decimal-pad"
@@ -63,16 +67,29 @@ export default function TradePriceTable({
             </View>
             <View style={styles.grid}>
               <View style={styles.colProfit}>
-                {profitStr ? (
-                  <Text
-                    style={[
-                      styles.profitText,
-                      isPositive && styles.profitPositive,
-                      isNegative && styles.profitNegative,
-                    ]}
-                  >
-                    {profitStr}
-                  </Text>
+                {profitData ? (
+                  <View style={styles.profitStack}>
+                    <Text
+                      style={[
+                        styles.profitPercent,
+                        isPositive && styles.profitPositive,
+                        isNegative && styles.profitNegative,
+                      ]}
+                    >
+                      {profitData.percent}
+                    </Text>
+                    <Text
+                      onLayout={index === 0 ? (e) => setProfitWidth(e.nativeEvent.layout.width) : undefined}
+                      style={[
+                        styles.profitAmount,
+                        isPositive && styles.profitPositive,
+                        isNegative && styles.profitNegative,
+                        { fontSize: getPreciseFontSize(profitData.amount, profitWidth || 80) },
+                      ]}
+                    >
+                      {profitData.amount}
+                    </Text>
+                  </View>
                 ) : (
                   <Text style={styles.profitEmpty}>—</Text>
                 )}
@@ -117,16 +134,26 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   colTrade: {
-    flex: 1,
+    width: 50,
     fontSize: 14,
     fontWeight: '600',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  tradeLabel: {
+    fontSize: 14,
     color: '#E6EDF3',
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#484F58',
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   colPrices: {
     flex: 2,
   },
   colProfit: {
-    width: 90, 
+    width: 105,
     alignItems: 'flex-end',
   },
   row: {
@@ -142,10 +169,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   priceLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
     color: '#8B949E',
-    width: 44,
+    width: 38,
   },
   input: {
     fontSize: 14,
@@ -156,9 +183,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#2D333B',
-    width: 90,
+    width: 80,
     marginRight: 5,
     textAlign: 'right',
+  },
+  entryInput: {
+    color: '#26A69A'
   },
   dash: {
     fontSize: 14,
@@ -178,11 +208,20 @@ const styles = StyleSheet.create({
     color: '#484F58',
     lineHeight: 18,
   },
-  profitText: {
+  profitStack: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  profitPercent: {
+    fontSize: 12,
+    fontWeight: '600',
+    fontFamily: monoFont,
+    lineHeight: 14,
+  },
+  profitAmount: {
     fontSize: 14,
     fontWeight: '700',
     fontFamily: monoFont,
-    marginLeft: 10,
   },
   profitPositive: {
     color: '#26A69A',
@@ -198,7 +237,8 @@ const styles = StyleSheet.create({
   },
   grid: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     gap: 5,
   }
 });

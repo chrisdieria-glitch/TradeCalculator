@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   label: {
-    fontSize: 9,
+    fontSize: 7,
     fontWeight: '600',
     color: '#484F58',
     textTransform: 'uppercase',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontFamily: monoFont,
   },
   profitValue: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '700',
     fontFamily: monoFont,
   },

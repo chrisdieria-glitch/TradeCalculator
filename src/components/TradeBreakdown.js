@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   colTrade: {
     width: 50,
     alignItems: 'center',
+    marginRight: 20,
   },
   colSize: {
     minWidth: 40,
@@ -108,6 +109,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#E6EDF3',
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#484F58',
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   badgeText: {
     fontSize: 11,

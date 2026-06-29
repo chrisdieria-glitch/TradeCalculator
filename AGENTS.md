@@ -186,3 +186,39 @@ The goal of TradingCalculator is to provide a quick and convenient tool for trad
   - Blue (`#4A90D9`) as accent for outlines and focus indicators
   - StatusBar set to light mode for dark background
   - All existing functionality and calculations preserved unchanged
+
+## 2026-06-28
+
+- Added capital input auto-lock with confirmation:
+  - `src/components/ConfirmModal.js` — new dark-themed confirmation modal (semi-opaque overlay, teal confirm button)
+  - `src/components/CapitalInput.js` — accepts `isLocked` and `onRequestEdit` props; when locked: input dims, `editable={false}`, `pointerEvents="none"`, "Locked" badge appears, tapping any part of the panel triggers unlock confirmation
+  - `src/screens/CalculatorScreen.js` — 5-second inactivity timer locks capital input when `capital > 0`; confirmation modal asks "Are you sure?" before allowing edits; timer resets on each keystroke; cleanup on unmount
+
+- Redesigned profit column in TradePriceTable:
+  - Profit column now displays two vertically stacked lines: percentage return on top (11px), dollar amount below (dynamically sized via `getPreciseFontSize`)
+  - Percentage calculated as `((close - entry) / entry) * 100`, formatted to 2 decimals with sign
+  - Both lines share the same green/red color based on P&L direction
+  - Column width increased from 90 to 105 for comfortable two-line layout
+
+- Added complete Journal / History system:
+  - `src/storage/journalStorage.js` — AsyncStorage abstraction layer with save, get, update, delete operations
+  - `src/utils/historyGrouping.js` — hierarchy grouping (year/month/day) with aggregate profit calculation
+  - `src/components/BottomNavigation.js` — persistent bottom tab bar (Calculator / History) with teal active indicator
+  - `src/components/SaveButton.js` — outlined "Save Operation" button, visible only when profit exists
+  - `src/components/HistoryRow.js` — pressable row with day/month/year label + signed profit display
+  - `src/components/HistoryList.js` — scrollable list container for any hierarchy level
+  - `src/components/JournalViewer.js` — read-only snapshot component mirroring calculator layout (capital, allocations, prices, summary)
+  - `src/screens/HistoryScreen.js` — state-based hierarchical navigation: Root → Year → Month → Day → Operation
+  - `App.js` — converted to navigation shell with animated horizontal slide between Calculator and History
+  - `src/screens/CalculatorScreen.js` — added save handler that captures complete state and persists to AsyncStorage
+  - `src/components/ConfirmModal.js` — added `cancelLabel` prop for generic use
+- New dependency: `@react-native-async-storage/async-storage` with Expo config plugin
+- All saved operations display read-only with the same layout and formatting as the active calculator
+
+## 2026-06-28
+
+- Debugged save pipeline:
+  - Fixed `handleSaveConfirm` in `src/screens/CalculatorScreen.js`: replaced 3 separate `new Date()` calls with a single `const now = new Date()` for calendar consistency
+  - Added return value check: `handleSaveConfirm` now checks if `saveOperation()` returned `null` and shows an `Alert` on failure
+  - Added `console.log` tracing at each pipeline step in `src/storage/journalStorage.js`: `getOperations` (raw json read, parsed ops count, errors) and `saveOperation` (save start with key, success, errors)
+  - Imported `Alert` from `react-native`

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Platform } from 'react-native';
 import { sharedStyles } from '../styles/shared';
 
 const monoFont = Platform.select({
@@ -8,22 +8,29 @@ const monoFont = Platform.select({
   default: 'monospace',
 });
 
-export default function CapitalInput({ capital, onChange, hasValidCapital, formattedCapital }) {
+export default function CapitalInput({ capital, onChange, hasValidCapital, formattedCapital, isLocked, onRequestEdit }) {
   return (
-    <View style={styles.panel}>
-      <Text style={sharedStyles.sectionTitle}>Total Capital</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="0.00"
-        placeholderTextColor="#484F58"
-        keyboardType="decimal-pad"
-        value={capital}
-        onChangeText={onChange}
-      />
-      {hasValidCapital && (
-        <Text style={styles.totalValue}>${formattedCapital}</Text>
-      )}
-    </View>
+    <Pressable onPress={isLocked ? onRequestEdit : undefined}>
+      <View style={styles.panel}>
+        <Text style={sharedStyles.sectionTitle}>Total Capital</Text>
+        <TextInput
+          style={[styles.input, isLocked && styles.inputLocked]}
+          placeholder="0.00"
+          placeholderTextColor="#484F58"
+          keyboardType="decimal-pad"
+          value={capital}
+          onChangeText={onChange}
+          editable={!isLocked}
+          pointerEvents={isLocked ? 'none' : undefined}
+        />
+        {hasValidCapital && (
+          <View style={styles.totalRow}>
+            <Text style={styles.totalValue}>${formattedCapital}</Text>
+            {isLocked && <Text style={styles.lockedBadge}>Locked</Text>}
+          </View>
+        )}
+      </View>
+    </Pressable>
   );
 }
 
@@ -45,12 +52,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#2D333B',
   },
-  totalValue: {
+  inputLocked: {
+    color: '#484F58',
+  },
+  totalRow: {
     marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  totalValue: {
     fontSize: 14,
     fontWeight: '700',
     color: '#26A69A',
     fontFamily: monoFont,
-    textAlign: 'right',
+  },
+  lockedBadge: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#8B949E',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    fontFamily: monoFont,
   },
 });

@@ -20,7 +20,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-splash-screen"
+      "expo-splash-screen",
+      "@react-native-async-storage/expo-with-async-storage"
     ]
   }
 }

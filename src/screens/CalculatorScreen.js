@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { sanitizeDecimalInput } from '../utils/sanitize';
 import { formatCurrency } from '../utils/format';
@@ -13,10 +13,17 @@ import TradeBreakdown from '../components/TradeBreakdown';
 import DividerBar from '../components/DividerBar';
 import TradePriceTable from '../components/TradePriceTable';
 import TradeSummary from '../components/TradeSummary';
+import ConfirmModal from '../components/ConfirmModal';
+import SaveButton from '../components/SaveButton';
+import { saveOperation } from '../storage/journalStorage';
 
 export default function CalculatorScreen() {
   const [capital, setCapital] = useState('');
   const [amountWrapWidth, setAmountWrapWidth] = useState(0);
+  const [isCapitalLocked, setIsCapitalLocked] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const capitalTimerRef = useRef(null);
 
   const {
     trades,
@@ -37,7 +44,67 @@ export default function CalculatorScreen() {
     const cleaned = sanitizeDecimalInput(text);
     if (cleaned === null) return;
     setCapital(cleaned);
+    setIsCapitalLocked(false);
+    if (capitalTimerRef.current) clearTimeout(capitalTimerRef.current);
+    capitalTimerRef.current = setTimeout(() => {
+      const num = parseFloat(cleaned);
+      if (!isNaN(num) && num > 0) {
+        setIsCapitalLocked(true);
+      }
+    }, 10000);
   };
+
+  const handleCapitalPress = () => {
+    if (isCapitalLocked) setShowConfirmModal(true);
+  };
+
+  const handleConfirmEdit = () => {
+    setShowConfirmModal(false);
+    setIsCapitalLocked(false);
+    if (capitalTimerRef.current) clearTimeout(capitalTimerRef.current);
+  };
+
+  const handleCancelEdit = () => {
+    setShowConfirmModal(false);
+  };
+
+  const handleSavePress = () => {
+    setShowSaveConfirm(true);
+  };
+
+  const handleSaveConfirm = async () => {
+    setShowSaveConfirm(false);
+    const now = new Date();
+    const op = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDate(),
+      capital: capitalNum,
+      trades: trades.map((t, i) => ({
+        label: TRADES[i].label,
+        percent: TRADES[i].percent,
+        entryPrice: t.entryPrice !== '' ? parseFloat(t.entryPrice) : null,
+        closePrice: t.closePrice !== '' && t.closePrice !== null ? parseFloat(t.closePrice) : null,
+      })),
+      entryWeightedAvg,
+      closeWeightedAvg,
+      totalProfit,
+    };
+    const result = await saveOperation(op);
+    if (result === null) {
+      Alert.alert('Save Failed', 'Could not save the operation. Check console for details.');
+    }
+  };
+
+  const handleSaveCancel = () => {
+    setShowSaveConfirm(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (capitalTimerRef.current) clearTimeout(capitalTimerRef.current);
+    };
+  }, []);
 
   const capitalNum = parseFloat(capital);
   const hasValidCapital = !isNaN(capitalNum) && capitalNum > 0;
@@ -49,8 +116,17 @@ export default function CalculatorScreen() {
     const allocated = (capitalNum * TRADES[i].percent) / 100;
     const quantity = allocated / entry;
     const profit = (close - entry) * quantity;
-    if (profit === 0) return '$0.00';
-    return profit > 0 ? `+$${formatCurrency(profit)}` : `-$${formatCurrency(Math.abs(profit))}`;
+    const percentReturn = ((close - entry) / entry) * 100;
+    return {
+      amount: profit === 0
+        ? '$0.00'
+        : profit > 0
+          ? `+$${formatCurrency(profit)}`
+          : `-$${formatCurrency(Math.abs(profit))}`,
+      percent: percentReturn === 0
+        ? '0.00%'
+        : `${percentReturn > 0 ? '+' : ''}${percentReturn.toFixed(2)}%`,
+    };
   });
 
   const entryWeightedAvg = (() => {
@@ -123,6 +199,8 @@ export default function CalculatorScreen() {
           onChange={handleCapitalChange}
           hasValidCapital={hasValidCapital}
           formattedCapital={hasValidCapital ? formatCurrency(capitalNum) : ''}
+          isLocked={isCapitalLocked}
+          onRequestEdit={handleCapitalPress}
         />
 
         {!hasValidCapital ? (
@@ -163,6 +241,33 @@ export default function CalculatorScreen() {
             showClose={closeCount > 0}
           />
         )}
+
+        {hasValidCapital && totalProfit !== null && (
+          <SaveButton
+            visible={true}
+            onPress={handleSavePress}
+          />
+        )}
+
+        <ConfirmModal
+          visible={showConfirmModal}
+          title="Change Capital"
+          message="Are you sure you want to change the capital? All trade calculations will update."
+          confirmLabel="Yes, Unlock"
+          cancelLabel="Cancel"
+          onConfirm={handleConfirmEdit}
+          onCancel={handleCancelEdit}
+        />
+
+        <ConfirmModal
+          visible={showSaveConfirm}
+          title="Save Operation"
+          message="Are you sure you finished this strategy?"
+          confirmLabel="Save"
+          cancelLabel="Cancel"
+          onConfirm={handleSaveConfirm}
+          onCancel={handleSaveCancel}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
